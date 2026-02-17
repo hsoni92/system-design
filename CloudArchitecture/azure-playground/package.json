@@ -1,0 +1,22 @@
+{
+  "name": "azure-playground",
+  "version": "1.0.0",
+  "description": "Minimal Node.js Azure integration harness for interview prep - SQL, Cosmos, Service Bus, Key Vault, App Insights, Entra ID",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "@azure/identity": "^4.0.0",
+    "@azure/keyvault-secrets": "^4.7.0",
+    "@azure/service-bus": "^7.9.0",
+    "@azure/cosmos": "^4.0.0",
+    "applicationinsights": "^2.9.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
+    "mssql": "^10.0.0"
+  }
+}
