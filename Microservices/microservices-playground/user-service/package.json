@@ -1,0 +1,8 @@
+{
+  "name": "user-service",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

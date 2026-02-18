@@ -1,0 +1,14 @@
+{
+  "name": "microservices-playground",
+  "private": true,
+  "description": "Minimal microservices demo: gateway + order + user services",
+  "scripts": {
+    "start": "concurrently -n gateway,order,user -c blue,green,yellow \"npm run start:gateway\" \"npm run start:order\" \"npm run start:user\"",
+    "start:gateway": "node gateway/index.js",
+    "start:order": "node order-service/index.js",
+    "start:user": "node user-service/index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
