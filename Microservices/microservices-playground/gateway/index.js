@@ -24,6 +24,15 @@ app.use(
   })
 );
 
+app.use(
+  '/events',
+  createProxyMiddleware({
+    target: 'http://localhost:3003',
+    changeOrigin: true,
+    pathRewrite: { '^/events': '/events' },
+  })
+);
+
 app.get('/health', (req, res) => res.json({ status: 'ok', service: 'gateway' }));
 
 app.listen(PORT, () => {

@@ -93,6 +93,10 @@ flowchart TB
 
 ---
 
+**Orchestration vs choreography** — In **orchestration**, one service coordinates the flow by calling others (sync or async). In **choreography**, services react to events; no single orchestrator. The playground implements orchestration (Order calls User); it also shows choreography-style behaviour by having Order publish an event (fire-and-forget to an audit service) so other services can subscribe.
+
+---
+
 ## 5. Deployment & Operations
 
 - **Independent deployment** — Each service has its own pipeline; versioning and backward compatibility (API and events) are first-class.

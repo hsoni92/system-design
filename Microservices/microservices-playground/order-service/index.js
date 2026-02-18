@@ -38,6 +38,15 @@ app.post('/orders', async (req, res) => {
   const id = String(nextId++);
   const order = { id, userId, product, quantity, createdAt: new Date().toISOString() };
   orders.set(id, order);
+
+  // Choreography-style: emit event; don't wait. Audit service is a subscriber.
+  const AUDIT_SERVICE_URL = 'http://localhost:3003';
+  fetch(`${AUDIT_SERVICE_URL}/events`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'OrderPlaced', payload: order }),
+  }).catch(() => {}); // fire-and-forget: ignore errors
+
   res.status(201).json(order);
 });
 
