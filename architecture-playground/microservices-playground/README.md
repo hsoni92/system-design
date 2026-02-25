@@ -6,6 +6,7 @@ A minimal Node.js microservices codebase to see **bounded contexts**, **database
 
 ```
 microservices-playground/
+├── discovery-service/ # Service registry (port 3999): register on start, resolve by name
 ├── gateway/           # Single entry: routes /users, /orders, /events to respective services
 ├── user-service/      # Owns user data (bounded context: User)
 ├── order-service/     # Owns order data; validates user via user-service; emits OrderPlaced to audit
@@ -20,6 +21,8 @@ npm install
 npm start
 ```
 
+All five processes (discovery, gateway, user, order, audit) start together. Discovery runs first as the registry; services register on startup and the gateway resolves them by name.
+
 Then:
 
 - **Create a user:** `curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"name":"Alice"}'
@@ -28,7 +31,14 @@ Then:
 - **List orders:** `curl http://localhost:3000/orders`
 - **List events (audit log):** `curl http://localhost:3000/events`
 
-Ports: Gateway `3000`, User service `3001`, Order service `3002`, Audit service `3003`. The gateway proxies; clients only talk to `3000`.
+Ports: Gateway `3000`, User service `3001`, Order service `3002`, Audit service `3003`, Discovery `3999`. The gateway proxies; clients only talk to `3000`.
+
+## Service discovery
+
+Services register with the discovery service on startup (`POST /register` with `name` and `port`). The gateway and order-service resolve other services by name (`GET /resolve/:name`) instead of using hardcoded URLs. See `discovery-service/index.js` for the registry implementation.
+
+- **Inspect registered services:** `curl http://localhost:3999/services`
+- **Resolve a service:** `curl http://localhost:3999/resolve/user-service`
 
 ## How services talk
 
@@ -46,7 +56,8 @@ Microservices communicate in two ways:
 
 | Concept | Where in code |
 |--------|----------------|
-| API Gateway | `gateway/index.js` — single entry, routes by path |
+| Service discovery | `discovery-service/index.js` — register on start; gateway/order resolve by name |
+| API Gateway | `gateway/index.js` — single entry, routes by path (targets from discovery) |
 | Bounded context / DB per service | Each service has its own in-memory store; no cross-service DB access |
 | Sync service-to-service | Order service calls User service (HTTP) to validate `userId` before creating order |
 | Orchestration | Order service orchestrates by calling User service before creating an order |

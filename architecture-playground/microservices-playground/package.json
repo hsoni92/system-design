@@ -1,0 +1,19 @@
+{
+  "name": "microservices-playground",
+  "private": true,
+  "description": "Minimal microservices demo: gateway + discovery + order + user + audit services",
+  "scripts": {
+    "start": "concurrently -n discovery,gateway,user,order,audit -c cyan,blue,green,yellow,magenta \"npm run start:discovery\" \"npm run start:gateway\" \"npm run start:user\" \"npm run start:order\" \"npm run start:audit\"",
+    "start:discovery": "node discovery-service/index.js",
+    "start:gateway": "node gateway/index.js",
+    "start:order": "node order-service/index.js",
+    "start:user": "node user-service/index.js",
+    "start:audit": "node audit-service/index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
